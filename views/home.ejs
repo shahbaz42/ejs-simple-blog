@@ -1,16 +1,21 @@
-<%- include("partials/header");  -%> 
+<%- include("partials/header"); -%>
 
-<h1> Home </h1>
-<p><%= content %></p>
+<div class="container2">
+  <h1>Home</h1>
+  <p><%= content %></p>
 
-<!-- <% for( let index = 0; index < posts.length; index++ ) { %>   
+  <!-- <% for( let index = 0; index < posts.length; index++ ) { %>   
     <h1><%= posts[index].title %></h1>
     <p><%= posts[index].post %> </p>
 <% } %> -->
 
-<% posts.slice().reverse().forEach(function(post) { %>
+  <% posts.slice().reverse().forEach(function(post) { %>
+  <a href="<%= "/posts/" + post.title %>">
     <h1><%= post.title %></h1>
-    <p><%= post.post %> </p>
-<% }) %>
+  </a>
+  
+  <p><%= post.post.slice(0,200) + "..." %></p>
+  <% }) %>
+</div>
 
-<%- include("partials/footer");  -%> 
+<%- include("partials/footer"); -%>

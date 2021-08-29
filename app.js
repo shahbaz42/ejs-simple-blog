@@ -3,6 +3,7 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const ejs = require("ejs");
+const _ = require("lodash");
 
 const posts = [];
 
@@ -21,13 +22,30 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static("public"));
 
 app.get("/", function (req, res) {
-  res.render("home", { content: homeStartingContent, posts : posts });
+  res.render("home", { content: homeStartingContent, posts: posts });
+});
+
+app.get("/posts/:postName", function(req, res){
+  const requestedTitle = req.params.postName;
+  posts.forEach(function (post) {
+    const storedTitle = post.title ;
+    if(_.lowerCase(storedTitle) === _.lowerCase(requestedTitle) ){    
+      res.render("post", {post : post});
+    }
+    else{
+      // res.send("<h1>Post Not Found</h1>")
+    }
+  });
+});
+
+app.get("/compose", function (req, res) {
+  res.render("compose");
 });
 
 app.post("/compose", function (req, res) {
   const post = {
     title: req.body.postTitle,
-    post: req.body.postBody
+    post: req.body.postBody,
   };
   posts.push(post);
   res.redirect("/");
@@ -39,10 +57,6 @@ app.get("/about", function (req, res) {
 
 app.get("/contact", function (req, res) {
   res.render("contact", { content: contactContent });
-});
-
-app.get("/compose", function (req, res) {
-  res.render("compose");
 });
 
 app.get("/", function (req, res) {});
